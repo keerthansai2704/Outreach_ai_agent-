@@ -57,12 +57,13 @@ def twilio_voice():
             json=payload,
             headers=headers
         )
+        logging.info(f"ElevenLabs response: {resp.status_code} - {resp.text}")
         resp.raise_for_status()
-        logging.info("ElevenLabs register-call success")
         return Response(resp.text, content_type="application/xml")
 
     except Exception as e:
         logging.error(f"ElevenLabs error: {str(e)}")
+        logging.error(f"Response body: {resp.text}")
         return Response(
             "<Response><Say>Sorry, AI assistant is unavailable.</Say></Response>",
             content_type="application/xml"
