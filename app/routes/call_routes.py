@@ -7,7 +7,7 @@ import logging
 call_bp = Blueprint("call_bp", __name__, url_prefix="/calls")
 
 
-@call_bp.route("", methods=["POST"])
+@call_bp.route("", methods=["POST","GET"])
 def create_call():
     logging.info('=========create_call route hit==========')
     """

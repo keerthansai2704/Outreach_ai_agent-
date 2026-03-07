@@ -24,4 +24,5 @@ with app.app_context():
 
 if __name__ == "__main__":
     logging.info("Starting Flask server...")
-    app.run(port=8090, debug=True)
+    # app.run(port=8090, debug=True)
+    app.run(host='0.0.0.0', port=8090, debug=True)
