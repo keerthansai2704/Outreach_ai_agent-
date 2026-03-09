@@ -29,8 +29,8 @@ def initiate_outbound_call(phone_number, call_id):
         to=phone_number,
         from_=from_number,
         url=voice_url,
-        status_callback_event=status_url,
-        status_callback_events=["initiated", "ringing", "answered", "completed"],
+        status_callback=status_url,
+        status_callback_event=["initiated", "ringing", "answered", "completed"],
         status_callback_method="POST"
     )
 
