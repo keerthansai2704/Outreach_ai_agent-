@@ -35,6 +35,7 @@ def create_call():
 
         # Trigger Twilio call via service layer
         twilio_sid = initiate_outbound_call(phone_number, new_call.id)
+        logging.info(f"new call {new_call}")
 
         # Update record with Twilio SID
         new_call.twilio_sid = twilio_sid
