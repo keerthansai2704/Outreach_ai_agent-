@@ -9,7 +9,7 @@ class Call(db.Model):
     twilio_sid = db.Column(db.String(100))
     status = db.Column(db.String(50), default="initiated")
     duration = db.Column(db.Integer)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(IST))
 
     def to_dict(self):
         return {
