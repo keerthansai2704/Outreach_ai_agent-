@@ -1,5 +1,6 @@
-from datetime import datetime
+from datetime import datetime ,timezone ,timedelta
 from app import db
+IST = timezone(timedelta(hours=5, minutes=30))
 
 class Call(db.Model):
     __tablename__ = "calls"
