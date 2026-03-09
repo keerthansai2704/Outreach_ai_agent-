@@ -7,7 +7,7 @@ import logging
 call_bp = Blueprint("call_bp", __name__, url_prefix="/calls")
 
 
-@call_bp.route("", methods=["POST","GET"])
+@call_bp.route("", methods=["POST"])
 def create_call():
     logging.info('=========create_call route hit==========')
     """
@@ -30,8 +30,8 @@ def create_call():
         
         # Create initial DB record
         new_call = Call(phone_number=phone_number)
-        db.session.add(new_call)
-        db.session.commit()
+        db.session.add(new_call) # new call record will be craeted and session will be added
+        db.session.commit() # saves the data to postgresql
 
         # Trigger Twilio call via service layer
         twilio_sid = initiate_outbound_call(phone_number, new_call.id)

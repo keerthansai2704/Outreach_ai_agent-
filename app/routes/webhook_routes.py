@@ -1,24 +1,3 @@
-# from flask import Blueprint, Response, request
-# import logging
-
-# webhook_bp = Blueprint("webhook_bp", __name__, url_prefix="/twilio")
-
-
-# @webhook_bp.route("/voice", methods=["POST"])
-# def twilio_voice():
-#     logging.info('=====twilio_voice route hit ======')
-#     call_id =request.args.get("call_id","unknown")
-
-#     host = request.host
-#     response_xml = f"""<?xml version="1.0" encoding = "UTF-8"?>
-#     <Response><Say>Hello. This is your AI call system.</Say>
-#     <connect>
-#         <stream url ="was://{host}/twilio/stream/{call_id}" />
-#     </connect>
-#     </Response>
-#     """
-
-#     return Response(response_xml.strip(), mimetype="text/xml")
 
 
 
@@ -69,3 +48,24 @@ def twilio_voice():
             "<Response><Say>Sorry, AI assistant is unavailable.</Say></Response>",
             content_type="application/xml"
         )
+@webhook_bp.route("/status", methods=["POST"])
+def call_status():
+    from app.models.call import Call
+    from app import db
+
+    call_id = request.args.get("call_id")
+    status = request.form.get("CallStatus") # twilio generated statu like ringing,in-progress,completd,failed,no answer so we get all this status from twilio 
+    duration = request.form.get("CallDuration", 0) # here the duration will get calulated
+
+    logging.info(f"Call status update: call_id={call_id}, status={status}, duration={duration}")
+
+    if call_id:
+        call = Call.query.get(int(call_id)) # here it finds the call record in data base
+        if call:
+            call.status = status #updates the status
+            call.duration = int(duration) # updates the duration
+
+            db.session.commit()#it stores in db like when this commann runs the storing will happen
+            logging.info(f"Call {call_id} updated to {status}")
+
+    return "", 200

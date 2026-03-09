@@ -20,13 +20,18 @@ def initiate_outbound_call(phone_number, call_id):
 
     # Webhook URL (Twilio will call this when call connects)
     voice_url = f"{base_url}/twilio/voice?call_id={call_id}"
-    logging.info(f"Voice URL being sent to Twilio: {voice_url}")
+    status_url = f"{base_url}/twilio/status?call_id={call_id}" 
+
+    logging.info(f"Voice URL being sent to Twilio: {voice_url},{status_url}")
 
     # Make outbound call
     call = client.calls.create(
         to=phone_number,
         from_=from_number,
-        url=voice_url
+        url=voice_url,
+        status_callback_event=status_url,
+        status_callbck_events=["initiated", "ringing", "answered", "completed"],
+        status_callback_method="POST"
     )
 
     # Return Twilio Call SID
