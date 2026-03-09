@@ -3,13 +3,15 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///calls.db")
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
 
     # Database
-    SQLALCHEMY_DATABASE_URI = os.getenv(
-        "DATABASE_URL", "sqlite:///calls.db"
-    )
+    SQLALCHEMY_DATABASE_URI =DATABASE_URL
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Twilio
