@@ -57,6 +57,7 @@ def twilio_voice():
             json=payload,
             headers=headers
         )
+        logging.info("=============register call request sent=============")
         logging.info(f"ElevenLabs response: {resp.status_code} - {resp.text}")
         resp.raise_for_status()
         return Response(resp.text, content_type="application/xml")
