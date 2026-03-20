@@ -4,9 +4,8 @@ from functools import wraps
 from flask import request, jsonify
 import os
 
-# Initialize Firebase Admin
 if not firebase_admin._apps:
-    cred = credentials.Certificate({s
+    cred = credentials.Certificate({
         "type": "service_account",
         "project_id": os.getenv("FIREBASE_PROJECT_ID"),
         "private_key_id": os.getenv("FIREBASE_PRIVATE_KEY_ID"),
