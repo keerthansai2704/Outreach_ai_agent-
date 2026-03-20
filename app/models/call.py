@@ -29,7 +29,7 @@ class Call(db.Model):
     __tablename__ = "calls"
     id = db.Column(db.Integer, primary_key=True)
     user_id =db.Column(db.String(100),nullable=False)
-    name =db.name(db.String(100))
+    name =db.Column(db.String(100))
     phone_number = db.Column(db.String(20), nullable=False)
     twilio_sid = db.Column(db.String(100))
     status = db.Column(db.String(50), default="initiated")
