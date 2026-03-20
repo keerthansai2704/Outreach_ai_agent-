@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.models.call import Call
 from app.services.call_services import initiate_outbound_call
+from app.utils.auth import verify_token
 from app import db
 import logging
 
@@ -8,6 +9,7 @@ call_bp = Blueprint("call_bp", __name__, url_prefix="/calls")
 
 
 @call_bp.route("", methods=["POST"])
+@verify_token
 def create_call():
     logging.info('=========create_call route hit==========')
     """
@@ -25,11 +27,16 @@ def create_call():
         return jsonify({"error": "phone_number is required"}), 400
 
     phone_number = data["phone_number"]
+    name =data.get("name","Unknown")
 
     try:
         
         # Create initial DB record
-        new_call = Call(phone_number=phone_number)
+        new_call = Call(phone_number=phone_number,
+                        name=name,
+                        user_id=request.user_id
+
+                        )
         db.session.add(new_call) # new call record will be craeted and session will be added
         db.session.commit() # saves the data to postgresql
 
@@ -52,6 +59,7 @@ def create_call():
 
 
 @call_bp.route("", methods=["GET"])
+@verify_token
 def list_calls():
     """
     Fetch all call records
