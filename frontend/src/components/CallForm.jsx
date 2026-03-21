@@ -3,6 +3,7 @@ import { initiateCall } from '../api';
 
 export default function CallForm({ onCallInitiated }) {
   const [phone, setPhone] = useState('');
+  const [name, setName] = useState('');  // ← ADD
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
 
@@ -11,9 +12,10 @@ export default function CallForm({ onCallInitiated }) {
     setLoading(true);
     setToast(null);
     try {
-      await initiateCall(phone);
+      await initiateCall(phone, name);  // ← ADD name
       setToast({ type: 'success', msg: `✓ Call initiated to ${phone}` });
       setPhone('');
+      setName('');  // ← ADD
       setTimeout(onCallInitiated, 1500);
     } catch (e) {
       setToast({ type: 'error', msg: e?.response?.data?.error || 'Failed to initiate call' });
@@ -23,14 +25,34 @@ export default function CallForm({ onCallInitiated }) {
 
   return (
     <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, overflow: 'hidden' }}>
-      {/* Header */}
       <div style={{ padding: '18px 22px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <span style={{ fontSize: 13, fontWeight: 700, letterSpacing: '.04em', textTransform: 'uppercase' }}>Initiate Call</span>
         <span style={{ fontSize: 10, fontFamily: 'var(--mono)', padding: '3px 8px', borderRadius: 4, background: '#00e5ff14', color: 'var(--accent)', border: '1px solid #00e5ff30' }}>POST /calls</span>
       </div>
-
-      {/* Body */}
       <div style={{ padding: 22 }}>
+
+        {/* Name field ← ADD */}
+        <div style={{ marginBottom: 18 }}>
+          <label style={{ display: 'block', fontSize: 11, fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 8, fontFamily: 'var(--mono)' }}>
+            Name
+          </label>
+          <input
+            type="text"
+            placeholder="Enter name"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            style={{
+              width: '100%', background: 'var(--surface2)',
+              border: '1px solid var(--border)', borderRadius: 8,
+              padding: '11px 14px', color: 'var(--text)',
+              fontFamily: 'var(--mono)', fontSize: 14, outline: 'none',
+            }}
+            onFocus={e => e.target.style.borderColor = 'var(--accent)'}
+            onBlur={e => e.target.style.borderColor = 'var(--border)'}
+          />
+        </div>
+
+        {/* Phone field */}
         <div style={{ marginBottom: 18 }}>
           <label style={{ display: 'block', fontSize: 11, fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 8, fontFamily: 'var(--mono)' }}>
             Phone Number
