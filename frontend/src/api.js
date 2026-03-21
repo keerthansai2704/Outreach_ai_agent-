@@ -17,6 +17,6 @@ api.interceptors.request.use(async (config) => {
 
 
 export const getCalls = () => api.get('/calls');
-export const initiateCall = (phone_number) => api.post('/calls', { phone_number });
+export const initiateCall = (phone_number,name) => api.post('/calls', { phone_number,name });
 
 export default api;
