@@ -1,6 +1,8 @@
 import { signInWithGoogle } from '../firebase';
 
 export default function Login() {
+  console.log('API KEY:', import.meta.env.VITE_FIREBASE_API_KEY) 
+
   const handleLogin = async () => {
     try {
       await signInWithGoogle();
