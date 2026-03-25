@@ -131,4 +131,63 @@ export default function Login() {
 
         {/* Forgot password link */}
         {mode === 'signin' && (
-          <div style={{ textAlign: 'right', marginBottom: 16, marginTop:
+          <div style={{ textAlign: 'right', marginBottom: 16, marginTop: -4 }}>
+            <span onClick={() => { setMode('reset'); setError(''); setSuccess(''); }}
+              style={{ fontSize: 11, color: 'var(--accent)', cursor: 'pointer', fontFamily: 'var(--mono)' }}>
+              Forgot password?
+            </span>
+          </div>
+        )}
+
+        {/* Error/Success */}
+        {error && (
+          <div style={{ padding: '10px 14px', borderRadius: 8, background: '#ff174414', border: '1px solid #ff174440', color: 'var(--red)', fontSize: 12, fontFamily: 'var(--mono)', marginBottom: 16, textAlign: 'left' }}>
+            {error}
+          </div>
+        )}
+        {success && (
+          <div style={{ padding: '10px 14px', borderRadius: 8, background: '#00e67614', border: '1px solid #00e67640', color: 'var(--green)', fontSize: 12, fontFamily: 'var(--mono)', marginBottom: 16, textAlign: 'left' }}>
+            {success}
+          </div>
+        )}
+
+        {/* Submit */}
+        <button onClick={handleSubmit} disabled={loading} style={{
+          width: '100%', padding: 13,
+          background: 'linear-gradient(135deg, var(--accent), #0095a8)',
+          border: 'none', borderRadius: 10, color: '#000',
+          fontFamily: 'var(--font)', fontSize: 14, fontWeight: 800,
+          letterSpacing: '.04em', textTransform: 'uppercase',
+          cursor: loading ? 'not-allowed' : 'pointer',
+          opacity: loading ? .6 : 1, marginBottom: 20,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+        }}>
+          {loading ? <><span className="loader"/>Loading...</> :
+            mode === 'signin' ? 'Sign In' :
+            mode === 'signup' ? 'Create Account' :
+            'Send Reset Email'}
+        </button>
+
+        {/* Toggle */}
+        <div style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--mono)' }}>
+          {mode === 'signin' ? (
+            <>Don't have an account?{' '}
+              <span onClick={() => { setMode('signup'); setError(''); setSuccess(''); }}
+                style={{ color: 'var(--accent)', cursor: 'pointer' }}>Sign up</span>
+            </>
+          ) : mode === 'signup' ? (
+            <>Already have an account?{' '}
+              <span onClick={() => { setMode('signin'); setError(''); setSuccess(''); }}
+                style={{ color: 'var(--accent)', cursor: 'pointer' }}>Sign in</span>
+            </>
+          ) : (
+            <>Remember your password?{' '}
+              <span onClick={() => { setMode('signin'); setError(''); setSuccess(''); }}
+                style={{ color: 'var(--accent)', cursor: 'pointer' }}>Sign in</span>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
