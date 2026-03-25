@@ -64,5 +64,6 @@ def list_calls():
     """
     Fetch all call records
     """
-    calls = Call.query.order_by(Call.created_at.desc()).all()
-    return jsonify([call.to_dict() for call in calls]), 200
+    calls = Call.query.filter_by(user_id=request.user_id)\
+        .order_by(Call.created_at.desc()).all()
+    return jsonify([c.to_dict() for c in calls]), 200
