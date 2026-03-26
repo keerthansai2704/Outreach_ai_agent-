@@ -64,13 +64,22 @@ export default function App() {
           <div style={{ fontSize: 20, fontWeight: 800, letterSpacing: '-.01em' }}>{pages[page]}</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
 
-            {/* ← ADD: User info */}
+            {/* ← ADD: User info
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <img src={user.photoURL} width={28} height={28} style={{ borderRadius: '50%' }}/>
               <span style={{ fontSize: 12, fontFamily: 'var(--mono)', color: 'var(--muted)' }}>
                 {user.displayName}
               </span>
-            </div>
+            </div> */}
+            {/* User info */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                {user.photoURL && (
+                  <img src={user.photoURL} width={28} height={28} style={{ borderRadius: '50%' }}/>
+                )}
+                <span style={{ fontSize: 12, fontFamily: 'var(--mono)', color: 'var(--muted)' }}>
+                  {user.displayName || user.email.split('@')[0]}  {/* ← ADD THIS */}
+                </span>
+              </div>
 
             <div style={{
               fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)',

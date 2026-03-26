@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { signInWithGoogle, signIn, signUp, resetPassword } from '../firebase';
+import { updateProfile } from 'firebase/auth';
+import { auth } from '../firebase';
 
 export default function Login() {
   const [mode, setMode] = useState('signin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');  // ← ADD
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -26,7 +29,13 @@ export default function Login() {
       if (mode === 'signin') {
         await signIn(email, password);
       } else if (mode === 'signup') {
-        await signUp(email, password);
+        const userCredential = await signUp(email, password);
+        // ← Save name to Firebase profile
+        if (name.trim()) {
+          await updateProfile(userCredential.user, {
+            displayName: name.trim()
+          });
+        }
       } else if (mode === 'reset') {
         await resetPassword(email);
         setSuccess('Password reset email sent! Check your inbox.');
@@ -71,8 +80,8 @@ export default function Login() {
 
         <div style={{ fontSize: 24, fontWeight: 800, marginBottom: 4 }}>OUTREACH AI</div>
         <div style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--mono)', marginBottom: 32 }}>
-          {mode === 'signin' ? 'Sign in to your account' : 
-           mode === 'signup' ? 'Create a new account' : 
+          {mode === 'signin' ? 'Sign in to your account' :
+           mode === 'signup' ? 'Create a new account' :
            'Reset your password'}
         </div>
 
@@ -99,6 +108,20 @@ export default function Login() {
               <div style={{ flex: 1, height: 1, background: 'var(--border)' }}/>
             </div>
           </>
+        )}
+
+        {/* Name field — only for signup */}
+        {mode === 'signup' && (
+          <div style={{ textAlign: 'left' }}>
+            <label style={labelStyle}>Full Name</label>
+            <input
+              type="text" placeholder="Your name"
+              value={name} onChange={e => setName(e.target.value)}
+              style={inputStyle}
+              onFocus={e => e.target.style.borderColor = 'var(--accent)'}
+              onBlur={e => e.target.style.borderColor = 'var(--border)'}
+            />
+          </div>
         )}
 
         {/* Email */}
@@ -129,7 +152,7 @@ export default function Login() {
           </div>
         )}
 
-        {/* Forgot password link */}
+        {/* Forgot password */}
         {mode === 'signin' && (
           <div style={{ textAlign: 'right', marginBottom: 16, marginTop: -4 }}>
             <span onClick={() => { setMode('reset'); setError(''); setSuccess(''); }}
